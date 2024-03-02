@@ -41,7 +41,7 @@ CHIP CPU {
     //Load A if A-instruction or DST is A
     Not(in=instruction[15],out=isainstruction);
     Or(a=isainstruction,b=instruction[5],out=loada);
-    Register(in=ain,load=loada,out=aout,out[0..14]=addressM);
+    ARegister(in=ain,load=loada,out=aout,out[0..14]=addressM);
 
     //Select A or M for Y-input to ALU
     Mux16(a=aout,b=inM,sel=instruction[12],out=aorm);
