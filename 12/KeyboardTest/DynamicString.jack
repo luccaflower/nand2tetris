@@ -1,0 +1,97 @@
+class DynamicString {
+    field String string;
+    field int currentMax;
+
+    constructor DynamicString new() {
+        let currentMax = 16;
+        let string = String.new(16);
+        return this;
+    }
+
+    method void append(String app) {
+        var int appLength, currentLength, newLength, i; 
+        var char next;
+        let currentLength = string.length();
+        let appLength = app.length();
+        let newLength = currentLength + appLength;
+        while (newLength > currentMax) {
+            do inflate();
+        }
+        while (i < appLength) {
+            let next = app.charAt(i);
+            do string.appendChar(next);
+            let i = i + 1;
+        }
+        return;
+    }
+    
+    method void appendChar(char c) {
+        var int currentLength, newLength;
+        let currentLength = string.length();
+        if (currentMax < (currentLength + 1)) {
+            do inflate();
+        }
+        do string.appendChar(c);
+        return;
+    }
+
+    method void inflate() {
+        var int i, length;
+        var char next;
+        var String newString;
+        let currentMax = currentMax * 2;
+        let newString = String.new(currentMax);
+        let i = 0;
+        let length = string.length();
+        while (i < length) {
+            let next = string.charAt(i);
+            do newString.appendChar(next);
+            let i = i + 1;
+        }
+        do string.dispose();
+        let string = newString;
+        return;
+    }
+
+    method int length() {
+        return string.length();
+    }
+
+    method String string() {
+        return string;
+    }
+
+    method String substring(int start, int end) {
+        var int i;
+        var char next; 
+        var String subString; 
+        if (start > end) {
+            return "";
+        }
+        let subString = String.new(end - start);
+        let i = 0;
+        while (i < (end - start)) {
+            let next = string.charAt(start + i);
+            do subString.appendChar(next);
+            let i = i + 1;
+        }
+        return subString;
+    }
+
+    method void eraseLastChar() {
+        do string.eraseLastChar();
+        return;
+    }
+
+    method void dispose() {
+        do string.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+    method String take() {
+        var String s;
+        let s = string;
+        do Memory.deAlloc(this);
+        return s;
+    }
+}
